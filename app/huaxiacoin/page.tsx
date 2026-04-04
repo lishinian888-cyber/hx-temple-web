@@ -58,29 +58,46 @@ export default function HuaxiaCoin() {
 
   return (
     <div className="min-h-screen bg-[#1A0F0A] text-[#EDE0BA] font-serif">
+      {/* === 統一美化版導航欄（所有頁面共用） === */}
+      {/* 統一導航欄 - 語言保持版 */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-[#1A0F0A]/95 backdrop-blur-md border-b border-[#C9A84C]/30">
         <div className="max-w-7xl mx-auto px-10 h-20 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Image src="/huaxia-seal-new.png" alt="华夏宗祠" width={52} height={52} className="rounded" priority />
             <div>
-              <div className="text-2xl font-bold tracking-widest text-white">華夏宗祠</div>
+              <div className="text-2xl font-bold tracking-widest text-white">
+                {lang === 'en' ? "Huaxia Temple" : "華夏宗祠"}
+              </div>
               <div className="text-xs text-[#C9A84C]/80 -mt-1">HUAXIA TEMPLE • DIGITAL HERITAGE</div>
             </div>
           </div>
 
           <div className="flex items-center gap-10 text-sm tracking-widest">
-            <Link href="/" className="hover:text-[#C9A84C]">首页</Link>
-            <Link href="/trace" className="hover:text-[#C9A84C]">姓氏溯源</Link>
-            <Link href="/tradition" className="hover:text-[#C9A84C]">傳統禮俗</Link>
-            <Link href="/culture" className="hover:text-[#C9A84C]">家族文化</Link>
-            <Link href="/memorial" className="hover:text-[#C9A84C]">紀念堂</Link>
-            <Link href="/huaxiacoin" className="text-[#C9A84C] font-medium">HuaxiaCoin</Link>
+            <Link href={`/?lang=${lang}`} className="hover:text-[#C9A84C]">首页</Link>
+            <Link href={`/trace?lang=${lang}`} className="hover:text-[#C9A84C]">姓氏溯源</Link>
+            <Link href={`/tradition?lang=${lang}`} className="hover:text-[#C9A84C]">傳統禮俗</Link>
+            <Link href={`/culture?lang=${lang}`} className="hover:text-[#C9A84C]">家族文化</Link>
+
+            <div className="group relative">
+              <Link href={`/memorial?lang=${lang}`} className="hover:text-[#C9A84C] flex items-center gap-1">
+                紀念堂 <span className="text-xs">▼</span>
+              </Link>
+              <div className="absolute hidden group-hover:block pt-4 left-0">
+                <div className="bg-[#2A1A12] border border-[#C9A84C]/50 rounded-2xl py-4 px-6 w-64 shadow-2xl">
+                  <Link href={`/memorial/ancient?lang=${lang}`} className="block py-3 px-4 hover:bg-[#C9A84C]/10 rounded-xl transition-all">古代先賢堂</Link>
+                  <Link href={`/memorial/family?lang=${lang}`} className="block py-3 px-4 hover:bg-[#C9A84C]/10 rounded-xl transition-all">家族紀念堂</Link>
+                  <Link href={`/memorial/modern?lang=${lang}`} className="block py-3 px-4 hover:bg-[#C9A84C]/10 rounded-xl transition-all">近現代名人紀念堂</Link>
+                </div>
+              </div>
+            </div>
+
+            <Link href={`/huaxiacoin?lang=${lang}`} className="hover:text-[#C9A84C]">HuaxiaCoin</Link>
           </div>
 
           <div className="flex border border-[#C9A84C]/50 rounded-xl overflow-hidden text-sm">
-            <button onClick={() => setLang('zh-TW')} className={`px-5 py-2 ${lang === 'zh-TW' ? 'bg-[#C9A84C] text-black' : 'hover:bg-[#C9A84C]/10'}`}>繁體</button>
-            <button onClick={() => setLang('zh-CN')} className={`px-5 py-2 ${lang === 'zh-CN' ? 'bg-[#C9A84C] text-black' : 'hover:bg-[#C9A84C]/10'}`}>简体</button>
-            <button onClick={() => setLang('en')} className={`px-5 py-2 ${lang === 'en' ? 'bg-[#C9A84C] text-black' : 'hover:bg-[#C9A84C]/10'}`}>English</button>
+            <button onClick={() => setLang('zh-TW')} className={`px-5 py-2 ${lang === 'zh-TW' ? 'bg-[#C9A84C] text-black font-medium' : 'hover:bg-[#C9A84C]/10'}`}>繁體</button>
+            <button onClick={() => setLang('zh-CN')} className={`px-5 py-2 ${lang === 'zh-CN' ? 'bg-[#C9A84C] text-black font-medium' : 'hover:bg-[#C9A84C]/10'}`}>简体</button>
+            <button onClick={() => setLang('en')} className={`px-5 py-2 ${lang === 'en' ? 'bg-[#C9A84C] text-black font-medium' : 'hover:bg-[#C9A84C]/10'}`}>English</button>
           </div>
         </div>
       </nav>

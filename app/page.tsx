@@ -2,12 +2,21 @@
 'use client';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 type Lang = 'zh-TW' | 'zh-CN' | 'en';
 
 export default function Home() {
   const [lang, setLang] = useState<Lang>('zh-TW');
+
+  // 從 URL 讀取語言參數
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const urlLang = params.get('lang') as Lang;
+    if (urlLang && ['zh-TW', 'zh-CN', 'en'].includes(urlLang)) {
+      setLang(urlLang);
+    }
+  }, []);
 
   const t = {
     'zh-TW': {
@@ -25,9 +34,15 @@ export default function Home() {
       why2Desc: "連接世界各地同宗同源的華人家族",
       why3: "文化傳承平台",
       why3Desc: "姓氏溯源、傳統禮俗、線上祭祀一站式服務",
-      cooperationTitle: "宗親會合作",
-      cooperationDesc: "歡迎各地宗親會與我們合作，共同弘揚華夏文化",
-      cooperationButton: "申請合作",
+      home: "首页",
+      trace: "姓氏溯源",
+      tradition: "傳統禮俗",
+      culture: "家族文化",
+      memorial: "紀念堂",
+      ancient: "古代先賢堂",
+      family: "家族紀念堂",
+      modern: "近現代名人紀念堂",
+      coin: "HuaxiaCoin",
       footer: "慎終追遠　民德歸厚"
     },
     'zh-CN': {
@@ -45,9 +60,15 @@ export default function Home() {
       why2Desc: "连接世界各地同宗同源的华人家族",
       why3: "文化传承平台",
       why3Desc: "姓氏溯源、传统礼俗、线上祭祀一站式服务",
-      cooperationTitle: "宗亲会合作",
-      cooperationDesc: "欢迎各地宗亲会与我们合作，共同弘扬华夏文化",
-      cooperationButton: "申请合作",
+      home: "首页",
+      trace: "姓氏溯源",
+      tradition: "传统礼俗",
+      culture: "家族文化",
+      memorial: "纪念堂",
+      ancient: "古代先贤堂",
+      family: "家族纪念堂",
+      modern: "近现代名人堂",
+      coin: "HuaxiaCoin",
       footer: "慎终追远　民德归厚"
     },
     en: {
@@ -65,9 +86,15 @@ export default function Home() {
       why2Desc: "Connect Chinese families of the same origin worldwide",
       why3: "Cultural Heritage Platform",
       why3Desc: "One-stop service for surname tracing, traditional rituals, online ceremonies",
-      cooperationTitle: "Clan Association Cooperation",
-      cooperationDesc: "Welcome clan associations from all over the world to cooperate with us to promote Huaxia culture",
-      cooperationButton: "Apply for Cooperation",
+      home: "Home",
+      trace: "Surname Tracing",
+      tradition: "Traditional Rituals",
+      culture: "Family Culture",
+      memorial: "Memorial Halls",
+      ancient: "Ancient Sages Hall",
+      family: "Family Memorial Hall",
+      modern: "Modern Notable Hall",
+      coin: "HuaxiaCoin",
       footer: "Honor the Ancestors • Cultivate Virtue"
     }
   } as const;
@@ -76,35 +103,66 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-[#1A0F0A] text-[#EDE0BA] font-serif overflow-hidden">
-      {/* 統一導航欄 */}
+      {/* 最終修正版導航欄 - 語言按鍵可正常點擊 */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-[#1A0F0A]/95 backdrop-blur-md border-b border-[#C9A84C]/30">
         <div className="max-w-7xl mx-auto px-10 h-20 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Image src="/huaxia-seal-new.png" alt="华夏宗祠" width={52} height={52} className="rounded" priority />
             <div>
-              <div className="text-2xl font-bold tracking-widest text-white">{current.title}</div>
-              <div className="text-xs text-[#C9A84C]/80 -mt-1">{current.subtitle}</div>
+              <div className="text-2xl font-bold tracking-widest text-white">
+                {lang === 'en' ? "Huaxia Temple" : "華夏宗祠"}
+              </div>
+              <div className="text-xs text-[#C9A84C]/80 -mt-1">HUAXIA TEMPLE • DIGITAL HERITAGE</div>
             </div>
           </div>
 
           <div className="flex items-center gap-10 text-sm tracking-widest">
-            <Link href="/" className="text-[#C9A84C] font-medium">首页</Link>
-            <Link href="/trace" className="hover:text-[#C9A84C]">姓氏溯源</Link>
-            <Link href="/tradition" className="hover:text-[#C9A84C]">傳統禮俗</Link>
-            <Link href="/culture" className="hover:text-[#C9A84C]">家族文化</Link>
-            <Link href="/memorial" className="hover:text-[#C9A84C]">紀念堂</Link>
-            <Link href="/huaxiacoin" className="hover:text-[#C9A84C]">HuaxiaCoin</Link>
+            <Link href={`/?lang=${lang}`} className="hover:text-[#C9A84C]">首页</Link>
+            <Link href={`/trace?lang=${lang}`} className="hover:text-[#C9A84C]">姓氏溯源</Link>
+            <Link href={`/tradition?lang=${lang}`} className="hover:text-[#C9A84C]">傳統禮俗</Link>
+            <Link href={`/culture?lang=${lang}`} className="hover:text-[#C9A84C]">家族文化</Link>
+
+            <div className="group relative">
+              <Link href={`/memorial?lang=${lang}`} className="hover:text-[#C9A84C] flex items-center gap-1">
+                紀念堂 <span className="text-xs">▼</span>
+              </Link>
+              <div className="absolute hidden group-hover:block pt-4 left-0">
+                <div className="bg-[#2A1A12] border border-[#C9A84C]/50 rounded-2xl py-4 px-6 w-64 shadow-2xl">
+                  <Link href={`/memorial/ancient?lang=${lang}`} className="block py-3 px-4 hover:bg-[#C9A84C]/10 rounded-xl transition-all">古代先賢堂</Link>
+                  <Link href={`/memorial/family?lang=${lang}`} className="block py-3 px-4 hover:bg-[#C9A84C]/10 rounded-xl transition-all">家族紀念堂</Link>
+                  <Link href={`/memorial/modern?lang=${lang}`} className="block py-3 px-4 hover:bg-[#C9A84C]/10 rounded-xl transition-all">近現代名人紀念堂</Link>
+                </div>
+              </div>
+            </div>
+
+            <Link href={`/huaxiacoin?lang=${lang}`} className="hover:text-[#C9A84C]">HuaxiaCoin</Link>
           </div>
 
+          {/* 語言切換按鍵 */}
           <div className="flex border border-[#C9A84C]/50 rounded-xl overflow-hidden text-sm">
-            <button onClick={() => setLang('zh-TW')} className={`px-5 py-2 ${lang === 'zh-TW' ? 'bg-[#C9A84C] text-black' : 'hover:bg-[#C9A84C]/10'}`}>繁體</button>
-            <button onClick={() => setLang('zh-CN')} className={`px-5 py-2 ${lang === 'zh-CN' ? 'bg-[#C9A84C] text-black' : 'hover:bg-[#C9A84C]/10'}`}>简体</button>
-            <button onClick={() => setLang('en')} className={`px-5 py-2 ${lang === 'en' ? 'bg-[#C9A84C] text-black' : 'hover:bg-[#C9A84C]/10'}`}>English</button>
+            <button 
+              onClick={() => setLang('zh-TW')}
+              className={`px-5 py-2 ${lang === 'zh-TW' ? 'bg-[#C9A84C] text-black font-medium' : 'hover:bg-[#C9A84C]/10'}`}
+            >
+              繁體
+            </button>
+            <button 
+              onClick={() => setLang('zh-CN')}
+              className={`px-5 py-2 ${lang === 'zh-CN' ? 'bg-[#C9A84C] text-black font-medium' : 'hover:bg-[#C9A84C]/10'}`}
+            >
+              简体
+            </button>
+            <button 
+              onClick={() => setLang('en')}
+              className={`px-5 py-2 ${lang === 'en' ? 'bg-[#C9A84C] text-black font-medium' : 'hover:bg-[#C9A84C]/10'}`}
+            >
+              English
+            </button>
           </div>
         </div>
       </nav>
 
-      {/* Hero */}
+      {/* Hero 部分 */}
       <div className="pt-32 pb-28 bg-[#1A0F0A] text-center">
         <div className="max-w-5xl mx-auto px-8">
           <div className="mb-8 flex justify-center">
@@ -122,12 +180,12 @@ export default function Home() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-6 justify-center">
-            <Link href="/trace">
+            <Link href={`/trace?lang=${lang}`}>
               <button className="px-14 py-6 bg-[#C42018] hover:bg-[#A31A12] text-xl font-medium rounded-2xl transition-all shadow-lg">
                 {current.exploreButton}
               </button>
             </Link>
-            <Link href="/memorial">
+            <Link href={`/memorial?lang=${lang}`}>
               <button className="px-14 py-6 border border-[#C9A84C]/70 hover:bg-[#C9A84C]/10 text-xl font-medium rounded-2xl transition-all">
                 {current.memorialButton}
               </button>
@@ -136,7 +194,7 @@ export default function Home() {
         </div>
       </div>
 
-      {/* 為什麼選擇我們 */}
+      {/* 為什麼選擇我們部分（保持原樣或稍後美化） */}
       <div className="bg-[#2A1A12] py-24">
         <div className="max-w-6xl mx-auto px-8">
           <h2 className="text-5xl font-bold text-center mb-16 text-[#E8C860]">{current.whyTitle}</h2>
