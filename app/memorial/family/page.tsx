@@ -38,9 +38,34 @@ export default function FamilyMemorial() {
       cancelButton: "取消",
       footer: "慎終追遠　民德歸厚"
     },
-    // 簡體和英文版本省略（與之前相同）
-    'zh-CN': { /* 同上，省略以節省空間 */ },
-    en: { /* 同上，省略以節省空間 */ }
+    'zh-CN': {
+      title: "家族纪念堂",
+      subtitle: "为您的家族建立永久的数字空间",
+      createButton: "立即创建纪念堂",
+      myMemorials: "我的纪念堂",
+      noMemorial: "您还没有创建任何家族纪念堂",
+      formTitle: "创建新家族纪念堂",
+      familyNamePlaceholder: "家族名称",
+      familyDescPlaceholder: "家族简介或祖先事迹",
+      photoPlaceholder: "点击或拖拽上传家族照片（选填）",
+      submitButton: "提交并上链",
+      cancelButton: "取消",
+      footer: "慎终追远　民德归厚"
+    },
+    en: {
+      title: "Family Memorial Hall",
+      subtitle: "Create a permanent digital space for your family",
+      createButton: "Create Memorial Now",
+      myMemorials: "My Memorials",
+      noMemorial: "You haven't created any family memorial yet",
+      formTitle: "Create New Family Memorial",
+      familyNamePlaceholder: "Family Name",
+      familyDescPlaceholder: "Family introduction or ancestral stories",
+      photoPlaceholder: "Click or drag to upload family photo (optional)",
+      submitButton: "Submit & On-Chain",
+      cancelButton: "Cancel",
+      footer: "Honor the Ancestors • Cultivate Virtue"
+    }
   } as const;
 
   const current = t[lang];
@@ -56,14 +81,14 @@ export default function FamilyMemorial() {
 
   const handleCreateMemorial = () => {
     if (!familyName.trim()) {
-      alert("請輸入家族名稱");
+      alert(current.title === "家族紀念堂" ? "請輸入家族名稱" : "Please enter family name");
       return;
     }
 
     const newMemorial: MemorialItem = {
       id: Date.now(),
       name: familyName,
-      desc: familyDesc || "尚未填寫簡介",
+      desc: familyDesc || (current.title === "家族紀念堂" ? "尚未填寫簡介" : "No description yet"),
       createdAt: new Date().toLocaleDateString('zh-TW'),
       photo: selectedPhoto || undefined
     };
@@ -116,7 +141,10 @@ export default function FamilyMemorial() {
 
       {/* 行動按鈕 */}
       <div className="max-w-4xl mx-auto px-8 pb-20 text-center">
-        <button onClick={() => setShowForm(true)} className="px-16 py-7 bg-[#C42018] hover:bg-[#A31A12] text-2xl font-medium rounded-2xl transition-all shadow-lg">
+        <button 
+          onClick={() => setShowForm(true)}
+          className="px-16 py-7 bg-[#C42018] hover:bg-[#A31A12] text-2xl font-medium rounded-2xl transition-all shadow-lg"
+        >
           {current.createButton}
         </button>
       </div>
@@ -136,7 +164,7 @@ export default function FamilyMemorial() {
                 <div key={mem.id} className="bg-[#1A0F0A] rounded-3xl border border-[#C9A84C]/40 overflow-hidden hover:border-[#C9A84C] transition-all group">
                   <div className="h-56 bg-[#3A2418] relative flex items-center justify-center overflow-hidden">
                     {mem.photo ? (
-                      <Image src={mem.photo} alt={mem.name} fill className="object-cover group-hover:scale-105 transition-transform" />
+                      <Image src={mem.photo} alt={mem.name} fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
                     ) : (
                       <div className="text-8xl opacity-40">🏛️</div>
                     )}
@@ -153,20 +181,38 @@ export default function FamilyMemorial() {
         </div>
       </div>
 
-      {/* 創建彈窗（保留照片上傳功能） */}
+      {/* 創建彈窗 */}
       {showForm && (
         <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50">
           <div className="bg-[#2A1A12] p-12 rounded-3xl max-w-lg w-full border border-[#E8C860]/60 shadow-2xl">
             <h3 className="text-3xl font-bold mb-8 text-center text-white">{current.formTitle}</h3>
             
-            <input type="text" placeholder={current.familyNamePlaceholder} value={familyName} onChange={(e) => setFamilyName(e.target.value)} className="w-full px-8 py-5 bg-[#3A2418] border border-[#E8C860]/70 rounded-2xl mb-6 text-lg focus:border-[#E8C860] outline-none" />
+            <input 
+              type="text" 
+              placeholder={current.familyNamePlaceholder}
+              value={familyName}
+              onChange={(e) => setFamilyName(e.target.value)}
+              className="w-full px-8 py-5 bg-[#3A2418] border border-[#E8C860]/70 rounded-2xl mb-6 text-lg focus:border-[#E8C860] outline-none"
+            />
             
-            <textarea placeholder={current.familyDescPlaceholder} value={familyDesc} onChange={(e) => setFamilyDesc(e.target.value)} rows={4} className="w-full px-8 py-5 bg-[#3A2418] border border-[#E8C860]/70 rounded-2xl mb-8 text-lg focus:border-[#E8C860] outline-none resize-y" />
+            <textarea 
+              placeholder={current.familyDescPlaceholder}
+              value={familyDesc}
+              onChange={(e) => setFamilyDesc(e.target.value)}
+              rows={4}
+              className="w-full px-8 py-5 bg-[#3A2418] border border-[#E8C860]/70 rounded-2xl mb-8 text-lg focus:border-[#E8C860] outline-none resize-y"
+            />
 
             <div className="mb-10">
               <label className="block text-sm text-[#C9A84C]/80 mb-3">上傳家族照片（選填）</label>
-              <div className="border-2 border-dashed border-[#E8C860]/50 rounded-2xl p-8 text-center hover:border-[#E8C860]">
-                <input type="file" accept="image/*" onChange={handlePhotoUpload} className="hidden" id="photo-upload" />
+              <div className="border-2 border-dashed border-[#E8C860]/50 rounded-2xl p-8 text-center hover:border-[#E8C860] transition-all">
+                <input 
+                  type="file" 
+                  accept="image/*" 
+                  onChange={handlePhotoUpload}
+                  className="hidden" 
+                  id="photo-upload"
+                />
                 <label htmlFor="photo-upload" className="cursor-pointer block">
                   {selectedPhoto ? (
                     <div className="relative w-40 h-40 mx-auto rounded-xl overflow-hidden border border-[#E8C860]/40">
@@ -183,10 +229,19 @@ export default function FamilyMemorial() {
             </div>
 
             <div className="flex gap-6">
-              <button onClick={() => { setShowForm(false); setSelectedPhoto(null); }} className="flex-1 py-5 border border-[#E8C860]/50 hover:bg-[#E8C860]/10 rounded-2xl text-lg transition-all">
+              <button 
+                onClick={() => {
+                  setShowForm(false);
+                  setSelectedPhoto(null);
+                }}
+                className="flex-1 py-5 border border-[#E8C860]/50 hover:bg-[#E8C860]/10 rounded-2xl text-lg transition-all"
+              >
                 {current.cancelButton}
               </button>
-              <button onClick={handleCreateMemorial} className="flex-1 py-5 bg-[#C42018] hover:bg-[#A31A12] rounded-2xl text-lg font-medium transition-all">
+              <button 
+                onClick={handleCreateMemorial}
+                className="flex-1 py-5 bg-[#C42018] hover:bg-[#A31A12] rounded-2xl text-lg font-medium transition-all"
+              >
                 {current.submitButton}
               </button>
             </div>
