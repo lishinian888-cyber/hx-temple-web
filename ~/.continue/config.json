@@ -1,0 +1,17 @@
+{
+  "models": [
+    {
+      "title": "Gemini 1.5 Pro",
+      "provider": "gemini",
+      "model": "gemini-1.5-pro-latest",
+      "apiKey": "你的 Gemini API Key"
+    },
+    {
+      "title": "Gemini 1.5 Flash",
+      "provider": "gemini",
+      "model": "gemini-1.5-flash-latest",
+      "apiKey": "AIzaSyAn7rCf2wrmKTKxA4VAwHqKLf_z-PwNVkk"
+    }
+  ],
+  "defaultModel": "Gemini 1.5 Pro"
+}

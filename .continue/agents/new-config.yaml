@@ -1,0 +1,7 @@
+models:
+  - name: gemini-1.5-pro
+    provider: gemini
+    model: gemini-1.5-pro-latest
+    apiKey: "AIzaSyAn7rCf2wrmKTKxA4VAwHqKLf_z-PwNVkk"
+
+defaultModel: gemini-1.5-pro
